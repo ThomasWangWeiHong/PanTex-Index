@@ -43,7 +43,7 @@ def PanTex_calculation_and_creation(input_filename, output_pantex_name, GL = 128
                                                                   np.percentile(image_array, UB)), 
                                                       out_range = (0, GL - 1)).astype('uint16')  
     image_array_padded = np.zeros(((image_array.shape[0] + 2 * buffer), (image_array.shape[1] + 2 * buffer)))
-    image_array_padded[buffer : (image_array.shape[0] + buffer + 1), buffer : (image_array.shape[1] + buffer + 1)] = image_array_rescaled
+    image_array_padded[buffer : (image_array.shape[0] + buffer), buffer : (image_array.shape[1] + buffer)] = image_array_rescaled
             
     pantex = np.zeros((image_array.shape[0], image_array.shape[1]))
     
