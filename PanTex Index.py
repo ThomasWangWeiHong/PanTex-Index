@@ -8,6 +8,46 @@ from skimage.feature import greycomatrix, greycoprops
 from tqdm import tqdm
 
 
+
+def grayscale_raster_creation(input_MSfile, output_filename):
+    """ 
+    This function creates a grayscale brightness image from an input image to be used for PanTex index calculation. For every pixel 
+    in the input image, the intensity values from the red, green, blue channels are first obtained, and the maximum of these values 
+    are then assigned as the pixel's intensity value, which would give the grayscale brightness image as mentioned earlier, as per 
+    standard practice in the remote sensing academia and industry. It is assumed that the first three channels of the input image 
+    correspond to the red, green and blue channels, irrespective of order.
+    
+    Inputs:
+    - input_MSfile: File path of the input image that needs to be converted to grayscale brightness image
+    - output_filename: File path of the grayscale brightness image that is to be written to file
+    
+    Outputs:
+    - gray: Numpy array of grayscale brightness image of corresponding multi - channel input image
+    
+    """
+    
+    image = np.transpose(gdal.Open(input_MSfile).ReadAsArray(), [1, 2, 0])
+    gray = np.zeros((int(image.shape[0]), int(image.shape[1])))
+    
+    for i in range(image.shape[0]):
+        for j in range(image.shape[1]):
+            gray[i, j] = max(image[i, j, 0], image[i, j, 1], image[i, j, 2])
+    
+    input_dataset = gdal.Open(input_MSfile)
+    input_band = input_dataset.GetRasterBand(1)
+    gtiff_driver = gdal.GetDriverByName('GTiff')
+    output_dataset = gtiff_driver.Create(output_filename, input_band.XSize, input_band.YSize, 1, gdal.GDT_Float32)
+    output_dataset.SetProjection(input_dataset.GetProjection())
+    output_dataset.SetGeoTransform(input_dataset.GetGeoTransform())
+    output_dataset.GetRasterBand(1).WriteArray(gray)
+    
+    output_dataset.FlushCache()
+    del output_dataset
+    
+    return gray
+
+
+  
 def PanTex_calculation_and_creation(input_filename, output_pantex_name, GL = 128, window = 35, LB = 15, UB = 85, 
                                     incrementation = 2, write = True):
     """ 
