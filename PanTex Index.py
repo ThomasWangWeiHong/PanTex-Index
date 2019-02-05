@@ -89,14 +89,14 @@ def PanTex_calculation_and_creation(input_filename, output_pantex_name, GL = 128
     
     for alpha in tqdm(range(buffer, image_array_padded.shape[0] - buffer, incrementation), mininterval = 600) :            
         for beta in range(buffer, image_array_padded.shape[1] - buffer, incrementation) :                                                                                                                                   
-            array = image_array_padded[(alpha - buffer) : (alpha + buffer + 1), (beta - buffer) : (beta + buffer + 1)]
+            array = image_array_padded[(alpha - buffer) : (alpha + buffer + 1), (beta - buffer) : (beta + buffer + 1)].astype(int)
             
             g_1 = greycomatrix(array, [1], [np.pi / 4, - np.pi / 4, 0, - np.pi / 2], levels = GL, normed = True)
             g_2 = greycomatrix(array, [2], [0, - np.pi / 2, math.atan(0.5), - math.atan(0.5), math.atan(2), - math.atan(2)], 
                                levels = GL, normed = True)
             contrast_1 = greycoprops(g_1, prop = 'contrast')
             contrast_2 = greycoprops(g_2, prop = 'contrast')
-            pantex[alpha, beta] = min(contrast_1.min(), contrast_2.min())
+            pantex[alpha - buffer, beta - buffer] = min(contrast_1.min(), contrast_2.min())
     
     if incrementation > 1 :
         print('Calculation of the PanTex index is complete. Conducting nearest neighbour interpolation now.')
