@@ -8,7 +8,7 @@ Anisotropic Rotation-Invariant Textural Measure' by Martino Pesaresi; Andrea Ger
 Requirements:
 - math
 - numpy
-- gdal
+- rasterio
 - scipy
 - skimage
 - tqdm
