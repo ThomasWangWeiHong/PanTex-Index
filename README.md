@@ -12,3 +12,11 @@ Requirements:
 - scipy
 - skimage
 - tqdm
+
+Test Image (courtesy of USGS NAIP):
+
+![alt text](https://github.com/ThomasWangWeiHong/PanTex-Index/blob/master/Test.JPG)
+
+PanTex Image:
+
+![alt text](https://github.com/ThomasWangWeiHong/PanTex-Index/blob/master/PanTex.JPG)
